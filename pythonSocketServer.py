@@ -12,6 +12,10 @@ serversocket.bind((ListenIP,ListenPORT))
 
 serversocket.listen(1)  #Currenly listen to one
 
+bigreply=""
+for i in range(0,1000):
+    bigreply=bigreply+str(i)+" "
+
 while True:
     clientsock,clientaddr=serversocket.accept()
     print "Connection establish with client:- ", clientaddr
@@ -20,6 +24,7 @@ while True:
         clientdata=clientsock.recv(BufferSize)
         if(not clientsock):
             break
-        clientsock.send("My response");
-    clientsock.close()
+        clientsock.send(bigreply);
+        print len(bigreply)
+        clientsock.close()
 print "Socket is created"
