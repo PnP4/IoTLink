@@ -10,7 +10,8 @@ ListenIP=cm.getIp();
 ListenPORT=int(cm.getPort())
 BufferSize=1024
 
-
+print cm.getNextNodeList()
+exit(0)
 
 serversocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
@@ -31,3 +32,5 @@ while True:
         clientsock.send(reply);
         print len(reply)
         clientsock.close()
+
+

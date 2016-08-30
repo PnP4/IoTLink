@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as xparse
-
+from Utils.NextNode import NextNode
 
 class ConfigMonitor:
 
@@ -20,6 +20,14 @@ class ConfigMonitor:
 
     def getIp(self):
         return self.ip
+
+    def getNextNodeList(self):
+        nodelist=[]
+        nextlist=self.config.getiterator("nextnode")
+        for node in nextlist:
+            tempnode=NextNode(node.find("toip").text , node.find("toport").text)
+            nodelist.append(tempnode)
+        return nodelist
 
 
 

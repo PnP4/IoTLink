@@ -2,4 +2,14 @@
 <link>
     <ip>127.0.0.1</ip>
     <port>8001</port>
+    <to>
+        <nextnode>
+            <toip>127.0.0.1</toip>
+            <toport>8005</toport>
+        </nextnode>
+        <nextnode>
+            <toip>127.0.0.1</toip>
+            <toport>8008</toport>
+        </nextnode>
+    </to>
 </link>
