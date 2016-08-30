@@ -1,23 +1,25 @@
 import xml.etree.ElementTree as xparse
 
-tree = xparse.parse('config.xml')
-print tree
 
 class ConfigMonitor:
 
     def __init__(self,filepath='config.xml'):
         self.config = xparse.parse(filepath)
-        self.ip=self.config.getiterator("ip")[0]
-        self.port = self.config.getiterator("port")[0]
+        self.ip=self.config.getiterator("ip")[0].text
+        self.port = self.config.getiterator("port")[0].text
 
 
     def getPort(self):
-        return int(self.port)
+        try:
+            print self.port
+            return int(self.port)
+
+        except:
+            print "Port must be integer"
+            return None
 
     def getIp(self):
         return self.ip
 
 
 
-configmonitor=ConfigMonitor()
-configmonitor.getPort()
