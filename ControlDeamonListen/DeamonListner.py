@@ -17,7 +17,6 @@ class ControlDeamon:
         except:
             return False
 
-
     def handleClient(self):
         reply="********"
         while True:
@@ -36,12 +35,7 @@ class ControlDeamon:
 
     def conectToNextNode(self,NextNode):
         try:
-            clientsocket = socket.socket()
-            clientsocket.connect(NextNode.getConnectableObject())
-            clientsocket.send("--------")
-            msg = clientsocket.recv(1024)
-            print msg
-            clientsocket.close()
+            NextNode.checkStatus()
             return True
         except:
             return False
@@ -51,19 +45,3 @@ class ControlDeamon:
 c=ControlDeamon()
 c.connect()
 c.handleClient()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
