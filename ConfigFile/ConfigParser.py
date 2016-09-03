@@ -7,6 +7,7 @@ class ConfigMonitor:
         self.config = xparse.parse(filepath)
         self.ip=self.config.getiterator("ip")[0].text
         self.port = self.config.getiterator("port")[0].text
+        self.name=self.config.getiterator("name")[0].text
 
 
     def getPort(self):
@@ -20,6 +21,9 @@ class ConfigMonitor:
 
     def getIp(self):
         return self.ip
+
+    def getName(self):
+        return self.name
 
     def getNextNodeList(self):
         nodelist=[]

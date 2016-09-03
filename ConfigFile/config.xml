@@ -2,6 +2,7 @@
 <link>
     <ip>127.0.0.1</ip>
     <port>8001</port>
+    <name>ABC</name>
     <to>
         <nextnode>
             <toip>192.168.1.2</toip>
