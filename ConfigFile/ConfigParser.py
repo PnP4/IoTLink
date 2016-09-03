@@ -8,6 +8,7 @@ class ConfigMonitor:
         self.ip=self.config.getiterator("ip")[0].text
         self.port = self.config.getiterator("port")[0].text
         self.name=self.config.getiterator("name")[0].text
+        self.program = self.config.getiterator("program")[0].text
 
 
     def getPort(self):
@@ -24,6 +25,9 @@ class ConfigMonitor:
 
     def getName(self):
         return self.name
+
+    def getProgramName(self):
+        return self.program
 
     def getNextNodeList(self):
         nodelist=[]

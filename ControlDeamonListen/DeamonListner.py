@@ -57,7 +57,7 @@ class ControlDeamon:
                 except Exception as e:
                     print e," while capturing the json commnd string"
                     continue
-            for node in self.cm.getNextNodeList():
+            for node in self.cm.getNextNodeList(): #check all nodes sequentially for the availability
                 if(not self.filetrOutSelfIps(node)):
                     print "Done"
                     self.conectToNextNode(node)
