@@ -1,7 +1,7 @@
 import apt
 import os
 
-
+packagenames=["netifaces"]
 
 def checkPrivilageMode():  #Find out the current this program is running as root or not.
     return 'SUDO_UID' in os.environ.keys()
@@ -24,6 +24,7 @@ def installPip(cache):
         print e
 
 
+
 def installPipPackage(packageName):  #Install package by using pip
     import pip
     pip.main(['install', packageName])
@@ -35,8 +36,10 @@ if(checkPrivilageMode()):
         installPip(cache)
     else:
         print "Pip installed"
+    for package in packagenames:
+        installPipPackage(package)
 else:
     print "You have to run this program as root:- sudo python AutomaticInstaller.py"
 
-installPipPackage(input("Package Name:- "))
+
 
