@@ -4,7 +4,8 @@ import os
 class inputDaemonHandle:
     def __init__(self):
         self.path = "/tmp/inpFifo"
-        
+        self.makeFiFo()
+
     def makeFiFo(self):
         try:
             os.mkfifo(self.path)
@@ -15,3 +16,5 @@ class inputDaemonHandle:
         fifo = open(self.path, "w")
         fifo.write(msg)
         fifo.close()
+
+
