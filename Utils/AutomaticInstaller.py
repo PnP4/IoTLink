@@ -1,6 +1,10 @@
 import apt
+import os
 
 
+
+def checkPrivilageMode():  #Find out the current this program is running as root or not.
+    return 'SUDO_UID' in os.environ.keys()
 
 def checkPip():
     cache = apt.cache.Cache()
@@ -20,7 +24,10 @@ def installPip(cache):
         print e
 
 
+if(checkPrivilageMode()):
+    cache=checkPip()
+    if(cache):#become true if the package is not installed
+        installPip(cache)
+else:
+    print "You have to run this program as root:- sudo python AutomaticInstaller.py"
 
-cache=checkPip()
-if(cache):#become true if the package is not installed
-    installPip(cache)
