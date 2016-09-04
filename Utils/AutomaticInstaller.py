@@ -24,10 +24,19 @@ def installPip(cache):
         print e
 
 
+def installPipPackage(packageName):  #Install package by using pip
+    import pip
+    pip.main(['install', packageName])
+
+
 if(checkPrivilageMode()):
     cache=checkPip()
     if(cache):#become true if the package is not installed
         installPip(cache)
+    else:
+        print "Pip installed"
 else:
     print "You have to run this program as root:- sudo python AutomaticInstaller.py"
+
+installPipPackage(input("Package Name:- "))
 
