@@ -37,5 +37,11 @@ class ConfigMonitor:
             nodelist.append(tempnode)
         return nodelist
 
+    def getInputDaemonPort(self):
+        nextlist = self.config.getiterator("inpport")[0].text
+        return nextlist
+
+
+
 
 

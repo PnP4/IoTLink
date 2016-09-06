@@ -1,11 +1,13 @@
 import socket
 import inputDaemonHandler
+from ConfigFile.ConfigParser import ConfigMonitor
 
 
 class inputDaemon:
     def __init__(self):
+        self.cm = ConfigMonitor("/home/nrv/PycharmProjects/PnpGlobalLink/ConfigFile/config.xml")
         self.ip=''
-        self.port=8100
+        self.port=self.cm.getInputDaemonPort()
         self.bufferSize=1024
         self.handle=None
 
