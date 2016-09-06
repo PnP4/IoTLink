@@ -1,5 +1,5 @@
 import socket
-import inputDaemonHandler
+from inputDaemonHandler import inputDaemonHandle
 from ConfigFile.ConfigParser import ConfigMonitor
 
 
@@ -14,9 +14,9 @@ class inputDaemon:
     def connect(self): #Bind the Socket
         try:
             self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.serversocket.bind((self.ip, self.port))
+            self.serversocket.bind((self.ip, int(self.port)))
             self.serversocket.listen(1)
-            self.handle=inputDaemonHandler()
+            self.handle=inputDaemonHandle()
             return True
         except Exception as e:
             print e, "InputDaemon @connect()"
@@ -30,5 +30,4 @@ class inputDaemon:
                 self.handle.writeData(msg)
                 print msg
             clientsock.close()
-
 
