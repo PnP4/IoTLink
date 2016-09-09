@@ -1,14 +1,21 @@
 import socket
 
+from ConfigFile.ConfigParser import ConfigMonitor
+
+
 class OutputDaemon:
     def __init__(self):
-        self.ip='127.0.0.1'
-        self.port=8080
+        self.cm = ConfigMonitor("/home/nrv/PycharmProjects/PnpGlobalLink/ConfigFile/config.xml")
+        self.ip=self.cm.getOutputIP()
+        self.port=self.cm.getOutputPort()
 
     def connect(self):
-        self.clientsocket=socket.socket()
-        self.clientsocket.connect((self.ip,self.port))
-
+        try:
+            self.clientsocket=socket.socket()
+            self.clientsocket.connect((self.ip,self.port))
+        except Exception as e:
+            print "Error at output:- ",e
+        
     def sendmsg(self):
         while True:
             msg="-------"
