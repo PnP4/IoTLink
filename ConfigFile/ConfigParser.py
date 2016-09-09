@@ -38,8 +38,16 @@ class ConfigMonitor:
         return nodelist
 
     def getInputDaemonPort(self):
-        nextlist = self.config.getiterator("inpport")[0].text
-        return nextlist
+        inpport = self.config.getiterator("inpport")[0].text
+        return inpport
+
+    def getOutputPort(self):
+        outport = self.config.getiterator("outport")[0].text
+        return outport
+
+    def getOutputIP(self):
+        outip = self.config.getiterator("outip")[0].text
+        return outip
 
 
 
