@@ -5,6 +5,7 @@ import sys
 class outputHandler:
     def __init__(self):
         self.path="/tmp/outFifo"
+        self.makeFifo()
 
     def makeFifo(self):
         try:
