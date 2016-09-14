@@ -27,6 +27,8 @@ class inputDaemon:
             clientsock, clientaddr = self.serversocket.accept()
             while True:  # Will read the pipe untill no of { and no of } matches. [Parserble]
                 msg = clientsock.recv(self.bufferSize)
+                if not msg:
+                    break
                 self.handle.writeData(msg)
                 print msg
             clientsock.close()
