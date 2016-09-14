@@ -88,7 +88,3 @@ class ControlDeamon:
             return False
 
 
-
-c=ControlDeamon()
-if(c.connect()):
-    c.handleClient()
