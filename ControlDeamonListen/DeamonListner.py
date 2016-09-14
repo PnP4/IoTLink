@@ -1,5 +1,8 @@
 import json
 import socket
+
+import time
+
 from ConfigFile.ConfigParser import ConfigMonitor
 import netifaces
 
@@ -44,27 +47,37 @@ class ControlDeamon:
 
     def handleClient(self):
         reply="********"
+        gofornode=False
         while True:
             clientsock, clientaddr = self.serversocket.accept()
             print "Connection establish with client:- ", clientaddr
             totalclientdata=""
+
             while True:  # Will read the pipe untill no of { and no of } matches. [Parserble]
+                ctime = time.time()
                 clientdata = clientsock.recv(self.BufferSize)
                 totalclientdata=totalclientdata+clientdata
+                ctimenow = time.time()
+                if(ctimenow==ctime):
+                    break
+                ctime=ctimenow
                 try:
                     json.loads(totalclientdata)  #Json is parsable means json is ccompletely receved
+                    gofornode=True
                     break
                 except Exception as e:
-                    print e," while capturing the json commnd string"
+                    print e," while capturing the json commnd string ",
                     continue
-            for node in self.cm.getNextNodeList(): #check all nodes sequentially for the availability
-                if(not self.filetrOutSelfIps(node)):
-                    print "Done"
-                    self.conectToNextNode(node)
-                else:
-                    print "Loop detected"
-            clientsock.send(reply)
-            print len(reply)
+            print "\n",totalclientdata
+            if(gofornode):
+                for node in self.cm.getNextNodeList(): #check all nodes sequentially for the availability
+                    if(not self.filetrOutSelfIps(node)):
+                        print "Done"
+                        self.conectToNextNode(node)
+                    else:
+                        print "Loop detected"
+                clientsock.send(reply)
+                print len(reply)
             clientsock.close()
 
     def conectToNextNode(self,NextNode):
