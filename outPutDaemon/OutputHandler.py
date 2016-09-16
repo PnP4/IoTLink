@@ -12,7 +12,7 @@ class outputHandler:
             os.mkfifo(self.path)
             return True
         except Exception as e:
-            print e
+            print "handle msg",e
             return False
 
     def getmsg(self):

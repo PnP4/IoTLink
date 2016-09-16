@@ -14,8 +14,10 @@ class OutputDaemon:
             self.clientsocket=socket.socket()
             self.clientsocket.connect((self.ip,int(self.port)))
             self.handle=outputHandler()
+            return True
         except Exception as e:
             print "Error at output:- ",e
+            return False
 
     def sendmsg(self):
         while True:

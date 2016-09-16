@@ -3,7 +3,7 @@ import socket
 
 
 ListenIP='';
-ListenPORT=8080;
+ListenPORT=8100;
 BufferSize=1024
 
 serversocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -24,7 +24,7 @@ while True:
         clientdata=clientsock.recv(BufferSize)
         if(not clientsock):
             break
-        clientsock.send(bigreply);
-        print len(bigreply)
-        clientsock.close()
+        #clientsock.send(bigreply);
+        print clientdata
+    clientsock.close()
 print "Socket is created"
