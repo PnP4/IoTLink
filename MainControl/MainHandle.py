@@ -49,3 +49,7 @@ else:
         outid=os.fork()
         if(outid==0):
             ouputFunc()
+
+
+while True:
+    pass
