@@ -33,4 +33,19 @@ def ouputFunc():
 
 #inputDaemonFunc()
 
-ouputFunc()
+#ouputFunc()
+
+controid=os.fork()
+if(controid==0):
+    print "Control"
+    controlDaemonFunct()
+else:
+    print "Inp"
+    inpid=os.fork()
+    if(inpid==0):
+        inputDaemonFunc()
+    else:
+        print "Out"
+        outid=os.fork()
+        if(outid==0):
+            ouputFunc()
