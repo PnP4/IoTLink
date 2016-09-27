@@ -2,12 +2,12 @@ import socket
 
 from ConfigFile.ConfigParser import ConfigMonitor
 from OutputHandler import outputHandler
-
+from DB.DataBase import SQLDB
 class OutputDaemon:
     def __init__(self):
-        self.cm = ConfigMonitor("/home/nrv/PycharmProjects/PnpGlobalLink/ConfigFile/config.xml")
-        self.ip=self.cm.getOutputIP()
-        self.port=self.cm.getOutputPort()
+        self.db = SQLDB()
+        self.ip=self.db.getOutputDaemonIP()
+        self.port=self.db.getOutputDaemonPort()
 
     def connect(self):
         try:

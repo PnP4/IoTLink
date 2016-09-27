@@ -55,9 +55,10 @@ class SQLDB:
         cursor.execute("SELECT ip FROM metmetadata WHERE name = 'out'")
         return cursor.fetchone()[0]
 
-    
+    def getControlDaemonPort(self):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute("SELECT port FROM metmetadata WHERE name = 'cont'")
+        return cursor.fetchone()[0]
 
-q=SQLDB()
-print q.getInputDaemonPort()
-print q.getOutputDaemonPort()
-print q.getOutputDaemonIP()
+
