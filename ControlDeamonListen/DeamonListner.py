@@ -4,15 +4,16 @@ import socket
 import time
 
 from ConfigFile.ConfigParser import ConfigMonitor
+from DB.DataBase import SQLDB
 import netifaces
 
 class ControlDeamon:
     def __init__(self):  #At initilasisation phase it will read the config and config itself
-        self.cm = ConfigMonitor("/home/nrv/PycharmProjects/PnpGlobalLink/ConfigFile/config.xml")
-        self.ListenIP = self.cm.getIp();
-        self.ListenPORT = int(self.cm.getPort())
+        self.db = SQLDB()
+        self.ListenIP = ''
+        self.ListenPORT = int(self.db.getControlDaemonPort())
         self.BufferSize = 1024
-        self.myips = self.getAllInterfaceAddresses()
+        self.myips = self.getAllInterfaceAddresses() #This will be keep all his ips.
 
 
     def getAllInterfaceAddresses(self):  # get the idea of the network address of the node has.
