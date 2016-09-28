@@ -24,7 +24,7 @@ class SQLDB:
 
     def CreateTable(self):
         cursor = self.dbconnection.cursor()
-        cursor.execute('''CREATE TABLE metmetadata(name text,ip text, port int,type text)''')
+        cursor.execute('''CREATE TABLE metmetadata(name text primary key,ip text, port int,type text)''')
         self.dbconnection.commit()
         self.dbconnection.close()
 
