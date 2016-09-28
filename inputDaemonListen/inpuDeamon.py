@@ -1,13 +1,13 @@
 import socket
 from inputDaemonHandler import inputDaemonHandle
 from ConfigFile.ConfigParser import ConfigMonitor
-
+from DB.DataBase import SQLDB
 
 class inputDaemon:
     def __init__(self):
-        self.cm = ConfigMonitor("/home/nrv/PycharmProjects/PnpGlobalLink/ConfigFile/config.xml")
+        self.db = SQLDB()
         self.ip=''
-        self.port=self.cm.getInputDaemonPort()
+        self.port=self.db.getInputDaemonPort()
         self.bufferSize=1024
         self.handle=None
 
