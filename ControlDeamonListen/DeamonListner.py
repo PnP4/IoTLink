@@ -6,6 +6,7 @@ import time
 from ConfigFile.ConfigParser import ConfigMonitor
 from DB.DataBase import SQLDB
 import netifaces
+from ControlMessageHandler import MessageHandle
 
 class ControlDeamon:
     def __init__(self):  #At initilasisation phase it will read the config and config itself
@@ -55,6 +56,7 @@ class ControlDeamon:
             totalclientdata=""
 
             while True:  # Will read the pipe untill no of { and no of } matches. [Parserble]
+                jsonmsg=None
                 ctime = time.time()
                 clientdata = clientsock.recv(self.BufferSize)
                 totalclientdata=totalclientdata+clientdata
@@ -63,7 +65,7 @@ class ControlDeamon:
                     break
                 ctime=ctimenow
                 try:
-                    json.loads(totalclientdata)  #Json is parsable means json is ccompletely receved
+                    jsonmsg=json.loads(totalclientdata)  #Json is parsable means json is ccompletely receved
                     gofornode=True
                     break
                 except Exception as e:
@@ -71,6 +73,8 @@ class ControlDeamon:
                     continue
             print "\n",totalclientdata
             if(gofornode):
+                handle=MessageHandle()
+                print handle.getNextNodes(jsonmsg)
                 for node in self.cm.getNextNodeList(): #check all nodes sequentially for the availability
                     if(not self.filetrOutSelfIps(node)):
                         print "Done"
