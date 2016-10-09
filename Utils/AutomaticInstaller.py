@@ -1,6 +1,11 @@
 import apt
 import os
 
+import sys
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+sys.path.append(path)
+
 packagenames=["netifaces"]
 
 def checkPrivilageMode():  #Find out the current this program is running as root or not.

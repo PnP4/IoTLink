@@ -33,7 +33,7 @@ class SQLDB:
         cursor = self.dbconnection.cursor()
         cursor.execute("Insert INTO metmetadata(name) values('inp')")
         cursor.execute("Insert INTO metmetadata(name) values('out')")
-        cursor.execute("Insert INTO metmetadata(name) values('cont')")
+        cursor.execute("Insert INTO metmetadata(name,port) values('cont',8100)")
         self.dbconnection.commit()
         self.dbconnection.close()
 

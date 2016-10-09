@@ -4,6 +4,11 @@ import os
 
 import time
 
+import sys
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+sys.path.append(path)
+
 from ControlDeamonListen.DeamonListner import ControlDeamon
 from inputDaemonListen.inpuDeamon import inputDaemon
 from outPutDaemon.OutPutDaemon import OutputDaemon

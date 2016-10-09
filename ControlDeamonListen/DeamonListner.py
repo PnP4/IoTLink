@@ -1,8 +1,13 @@
 import json
+import os
 import socket
 
 import time
 
+import sys
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+sys.path.append(path)
 
 from DB.DataBase import SQLDB
 import netifaces

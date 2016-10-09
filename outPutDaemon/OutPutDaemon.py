@@ -1,4 +1,11 @@
+import os
 import socket
+
+import sys
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+sys.path.append(path)
+
 
 from ConfigFile.ConfigParser import ConfigMonitor
 from OutputHandler import outputHandler
