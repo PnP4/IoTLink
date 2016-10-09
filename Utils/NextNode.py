@@ -3,9 +3,11 @@ import socket
 from socket import error as socket_error
 
 class NextNode:
-    def __init__(self,ipinp,ipport):
+    def __init__(self,ipinp,ipport,inpInpPort=None):
         self.ip=ipinp
-        self.port=ipport
+        self.port=ipport #control
+        self.inputPort=inpInpPort
+
 
     def getport(self): #Retun the port of the current object
         try:
@@ -20,15 +22,16 @@ class NextNode:
         conlink=(self.getip(),self.getport())
         return conlink
 
-    def checkStatus(self):
+    def checkStatus(self,msg):
         clientsocket = socket.socket()
         clientsocket.connect(self.getConnectableObject())
         try:
-            clientsocket = socket.socket()
             req_msg_json={}
             req_msg_json["type"]="checkstatus"
-            clientsocket.sendall(json.dumps(req_msg_json))
+            print "NextNode",msg
+            clientsocket.send(json.dumps(msg))
         except socket_error as s_err:
+            print s_err," ppppp"
             if(s_err.errno==111):
                 return False   #ToDo add return message type
 

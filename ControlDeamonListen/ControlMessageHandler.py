@@ -1,5 +1,5 @@
 import json
-
+from Utils.NextNode import NextNode
 
 class MessageHandle:
 
@@ -24,7 +24,12 @@ class MessageHandle:
         myprg=fulljson["you"]
         nextmeta=self.findNext(fulljson,myprg)
         if(nextmeta!=None):
-            return fulljson[nextmeta["name"]]
+            nextList=fulljson[nextmeta["name"]]
+            nextReturnList=[]
+            for i in nextList:
+                if(i["avialable"]!=-1):
+                    nextReturnList.append(NextNode(i["ip"], i["conport"],i["inport"]))
+            return nextReturnList
         else:
             return None
 
@@ -33,11 +38,11 @@ class MessageHandle:
 
 data={}
 data["seq"]=[{"seqno":1,"name":"a"},{"seqno":2,"name":"b"},{"seqno":3,"name":"c"},{"seqno":4,"name":"d"}]
-data["you"]="b"
-data["a"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090}]
-data["b"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090}]
-data["c"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090}]
-data["d"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","port":8080,"avialable":0,"inport":8090}]
+data["you"]="a"
+data["a"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
+data["b"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
+data["c"]=[{"ip":"127.0.100.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
+data["d"]=[{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
 
 print json.dumps(data)
 

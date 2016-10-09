@@ -21,8 +21,9 @@ while True:
     print "Connection establish with client:- ", clientaddr
 
     while True:
-        clientdata=clientsock.recv(BufferSize)
-        if(not clientsock):
+        print "wait fro recv"
+        clientdata=str(clientsock.recv(BufferSize))
+        if(not clientdata):
             break
         #clientsock.send(bigreply);
         print clientdata

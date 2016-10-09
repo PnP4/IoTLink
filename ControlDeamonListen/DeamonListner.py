@@ -74,22 +74,27 @@ class ControlDeamon:
             print "\n",totalclientdata
             if(gofornode):
                 handle=MessageHandle()
-                print handle.getNextNodes(jsonmsg)
-                for node in self.cm.getNextNodeList(): #check all nodes sequentially for the availability
+                nextList=handle.getNextNodes(jsonmsg)
+
+                for node in nextList: #check all nodes sequentially for the availability
                     if(not self.filetrOutSelfIps(node)):
                         print "Done"
-                        self.conectToNextNode(node)
+                        self.conectToNextNode(node,jsonmsg)
                     else:
                         print "Loop detected"
                 clientsock.send(reply)
                 print len(reply)
             clientsock.close()
 
-    def conectToNextNode(self,NextNode):
+    def conectToNextNode(self,NextNode,msg):
         try:
-            NextNode.checkStatus()
+
+            NextNode.checkStatus(msg)
             return True
         except:
             return False
 
 
+p=ControlDeamon()
+if(p.connect()):
+    p.handleClient()
