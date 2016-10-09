@@ -29,7 +29,9 @@ class NextNode:
             req_msg_json={}
             req_msg_json["type"]="checkstatus"
             print "NextNode",msg
-            clientsocket.send(json.dumps(msg))
+            clientsocket.sendall(json.dumps(msg))
+            rep = clientsocket.recv(1024)
+            return rep
         except socket_error as s_err:
             print s_err," ppppp"
             if(s_err.errno==111):

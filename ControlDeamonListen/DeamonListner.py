@@ -70,9 +70,10 @@ class ControlDeamon:
                     break
                 except Exception as e:
                     print e," while capturing the json commnd string ",
-                    continue
+
+
             print "\n",totalclientdata
-            if(gofornode):
+            if(gofornode):#ToDO check the status and return I cant message
                 handle=MessageHandle()
                 nextList=handle.getNextNodes(jsonmsg)
                 if(nextList!=None):
@@ -80,19 +81,27 @@ class ControlDeamon:
                         if(not self.filetrOutSelfIps(node)):
                             print "Done"
                             jsonmsg["you"]=handle.findNext(jsonmsg,jsonmsg["you"])["name"]
-                            self.conectToNextNode(node,jsonmsg)
+                            msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
+                            if(msg):
+                                print "====="
+                            else:
+                                print "------"
+
                         else:
                             print "Loop detected"
                     clientsock.send(reply)
                     print len(reply)
-                else:
+                else:#ToDo check the availability This means This is the end node.
+                    reply={}
+                    reply["msg"]="Done"
+                    clientsock.send(json.dumps(reply))
                     pass
             clientsock.close()
 
     def conectToNextNode(self,NextNode,msg):
         try:
-            NextNode.checkStatus(msg)
-            return True
+            return NextNode.checkStatus(msg)
+
         except:
             return False
 
