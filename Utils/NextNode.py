@@ -35,7 +35,7 @@ class NextNode:
         try:
             req_msg_json={}
             req_msg_json["type"]="checkstatus"
-            print "NextNode",msg
+            #print "NextNode",msg
             clientsocket.sendall(json.dumps(msg))
             rep = clientsocket.recv(1024)
             return rep

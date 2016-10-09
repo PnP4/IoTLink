@@ -3,7 +3,7 @@ import socket
 
 
 ListenIP='';
-ListenPORT=8100;
+ListenPORT=8150;
 BufferSize=1024
 
 serversocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
