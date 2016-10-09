@@ -3,7 +3,7 @@ import socket
 
 import time
 
-from ConfigFile.ConfigParser import ConfigMonitor
+
 from DB.DataBase import SQLDB
 import netifaces
 from ControlMessageHandler import MessageHandle
@@ -75,20 +75,22 @@ class ControlDeamon:
             if(gofornode):
                 handle=MessageHandle()
                 nextList=handle.getNextNodes(jsonmsg)
-
-                for node in nextList: #check all nodes sequentially for the availability
-                    if(not self.filetrOutSelfIps(node)):
-                        print "Done"
-                        self.conectToNextNode(node,jsonmsg)
-                    else:
-                        print "Loop detected"
-                clientsock.send(reply)
-                print len(reply)
+                if(nextList!=None):
+                    for node in nextList: #check all nodes sequentially for the availability
+                        if(not self.filetrOutSelfIps(node)):
+                            print "Done"
+                            jsonmsg["you"]=handle.findNext(jsonmsg,jsonmsg["you"])["name"]
+                            self.conectToNextNode(node,jsonmsg)
+                        else:
+                            print "Loop detected"
+                    clientsock.send(reply)
+                    print len(reply)
+                else:
+                    pass
             clientsock.close()
 
     def conectToNextNode(self,NextNode,msg):
         try:
-
             NextNode.checkStatus(msg)
             return True
         except:
