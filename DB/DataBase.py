@@ -25,6 +25,7 @@ class SQLDB:
     def CreateTable(self):
         cursor = self.dbconnection.cursor()
         cursor.execute('''CREATE TABLE metmetadata(name text primary key,ip text, port int,type text)''')
+        cursor.execute('''CREATE TABLE snapdata(keyname text primary key,data text)''')
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -34,6 +35,9 @@ class SQLDB:
         cursor.execute("Insert INTO metmetadata(name) values('inp')")
         cursor.execute("Insert INTO metmetadata(name) values('out')")
         cursor.execute("Insert INTO metmetadata(name,port) values('cont',8100)")
+        cursor.execute("Insert INTO snapdata(keyname,data) values('status','avialable')")
+        cursor.execute("Insert INTO snapdata(keyname) values('prgid')")
+        cursor.execute("Insert INTO snapdata(programs) values('a|b|c|d')")
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -61,4 +65,28 @@ class SQLDB:
         cursor.execute("SELECT port FROM metmetadata WHERE name = 'cont'")
         return cursor.fetchone()[0]
 
+    def getStatus(self):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute("SELECT data FROM snapdata WHERE keyname = 'status'")
+        return cursor.fetchone()[0]
+
+    def getprgid(self):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute("SELECT data FROM snapdata WHERE keyname = 'prgid'")
+        return cursor.fetchone()[0]
+
+    def getprograms(self):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute("SELECT data FROM snapdata WHERE keyname = 'programs'")
+        return cursor.fetchone()[0]
+
+    def isPrgInMe(self,prg):
+        prs=self.getprograms()
+        prs=prs.split("|")
+        if (prg in prs):
+            return True
+        return False
 
