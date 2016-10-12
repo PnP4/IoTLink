@@ -17,6 +17,7 @@ class SQLDB:
         try:
             self.insertInitData()
         except Exception as e:
+            print e
             pass
 
     def getCon(self):
@@ -32,12 +33,12 @@ class SQLDB:
     def insertInitData(self):
         self.getCon()
         cursor = self.dbconnection.cursor()
-        cursor.execute("Insert INTO metmetadata(name) values('inp')")
-        cursor.execute("Insert INTO metmetadata(name) values('out')")
+        cursor.execute("Insert INTO metmetadata(name,port) values('inp',8200)")
+        cursor.execute("Insert INTO metmetadata(name,port) values('out',8500)")
         cursor.execute("Insert INTO metmetadata(name,port) values('cont',8100)")
         cursor.execute("Insert INTO snapdata(keyname,data) values('status','avialable')")
         cursor.execute("Insert INTO snapdata(keyname) values('prgid')")
-        cursor.execute("Insert INTO snapdata(programs) values('a|b|c|d')")
+        cursor.execute("Insert INTO snapdata(keyname,data) values('programs','a|b|c|d')")
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -90,3 +91,13 @@ class SQLDB:
             return True
         return False
 
+
+a=SQLDB()
+print a.getOutputDaemonPort()
+print a.getInputDaemonPort()
+print a.getprograms()
+print a.getControlDaemonPort()
+print a.getOutputDaemonIP()
+print a.isPrgInMe("a")
+print a.isPrgInMe("z")
+print a.getprgid()

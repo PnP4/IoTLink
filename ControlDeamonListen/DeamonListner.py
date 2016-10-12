@@ -96,11 +96,16 @@ class ControlDeamon:
                             print "Loop detected"
                     clientsock.send(reply)
                     print len(reply)
-                else:#ToDo check the availability This means This is the end node.
-                    reply={}
-                    reply["msg"]="Done"
-                    clientsock.send(json.dumps(reply))
-                    pass
+                else:#ToDo CHECK THE PROGRAM AVAILABILITY  NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
+                    if(self.db.getStatus()=="available"):
+                        reply={}
+                        reply["msg"]="Done"
+                        clientsock.send(json.dumps(reply))
+                    else:
+                        reply = {}
+                        reply["msg"] = "Fail"
+                        clientsock.send(json.dumps(reply))
+                    #pass
             clientsock.close()
 
     def conectToNextNode(self,NextNode,msg):
