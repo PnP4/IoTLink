@@ -9,6 +9,7 @@ import sys
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(path)
 
+from termcolor import colored, cprint
 from DB.DataBase import SQLDB
 import netifaces
 from ControlMessageHandler import MessageHandle
@@ -81,30 +82,49 @@ class ControlDeamon:
             isavilable=True
             reply = {}
             reply["msg"] = "Done"
+            reply["iam"]=jsonmsg["you"]
+            reply["myips"] = jsonmsg["you"]
             if(gofornode):#ToDO check the status and return I cant message
                 if (self.db.getStatus() != "av"):
+                    cprint(' not av', 'green', 'on_red')
                     isavilable=False
                     reply["msg"] = "Fail"
                     reply["next"] = None
                 if(isavilable):  #this node is avilable
+                    cprint('in av', 'green', 'on_red')
                     handle=MessageHandle()
                     nextList=handle.getNextNodes(jsonmsg)
                     if(nextList!=None):  #This is not an end node
+                        cprint('Not Last', 'green', 'on_red')
                         for node in nextList: #check all nodes sequentially for the availability
+                            cprint('an node '+node.getip(), 'green', 'on_red')
                             if(not self.filetrOutSelfIps(node)):
                                 print "Done"
+                                cprint('not loop', 'green', 'on_red')
                                 jsonmsg["you"]=handle.findNext(jsonmsg,jsonmsg["you"])["name"]
                                 msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
                                 if(msg):
-                                    if(json.loads(msg)["msg"]!="Fail"):
-                                        reply["next"]=msg
+                                    cprint('msg up', 'green', 'on_red')
+                                    #print msg
+                                    print "======================"
+                                    if(not ("Fail" in json.loads(msg)["msg"])):
+                                        cprint('Fail not in', 'green', 'on_red')
+                                        tempjm=json.loads(msg)
+                                        tempjm["ip"]=node.getip()
+                                        reply["next"]=json.dumps(tempjm)
                                         print "------ ",msg
                                         break
+                                    else:
+                                        cprint('Fail in', 'green', 'on_red')
                                 else:
+                                    cprint('msg is False', 'green', 'on_red')
                                     pass
                             else:
+                                cprint('loop broo', 'green', 'on_red')
                                 print "Loop detected"
-                    else:#ToDo CHECK THE PROGRAM AVAILABILITY  NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
+                    else:#ToDo NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
+                        cprint('Last', 'green', 'on_red')
+                        print "HEY AM I THE LAST ONE?"
                         pass
             repmsg=json.dumps(reply)
             clientsock.send(repmsg)
