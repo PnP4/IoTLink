@@ -23,6 +23,7 @@ clientsocket.connect((ConnetTo,Port))
 fullmsg=""
 #while True:
 clientsocket.sendall(msg)
+print clientsocket.recv(2048)
 
 #print len(fullmsg)
 clientsocket.close()

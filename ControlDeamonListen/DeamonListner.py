@@ -78,34 +78,37 @@ class ControlDeamon:
 
 
             print "\n",totalclientdata
+            isavilable=True
+            reply = {}
+            reply["msg"] = "Done"
             if(gofornode):#ToDO check the status and return I cant message
-                handle=MessageHandle()
-                nextList=handle.getNextNodes(jsonmsg)
-                if(nextList!=None):
-                    for node in nextList: #check all nodes sequentially for the availability
-                        if(not self.filetrOutSelfIps(node)):
-                            print "Done"
-                            jsonmsg["you"]=handle.findNext(jsonmsg,jsonmsg["you"])["name"]
-                            msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
-                            if(msg):
-                                print "====="
+                if (self.db.getStatus() != "av"):
+                    isavilable=False
+                    reply["msg"] = "Fail"
+                    reply["next"] = None
+                if(isavilable):  #this node is avilable
+                    handle=MessageHandle()
+                    nextList=handle.getNextNodes(jsonmsg)
+                    if(nextList!=None):  #This is not an end node
+                        for node in nextList: #check all nodes sequentially for the availability
+                            if(not self.filetrOutSelfIps(node)):
+                                print "Done"
+                                jsonmsg["you"]=handle.findNext(jsonmsg,jsonmsg["you"])["name"]
+                                msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
+                                if(msg):
+                                    if(json.loads(msg)["msg"]!="Fail"):
+                                        reply["next"]=msg
+                                        print "------ ",msg
+                                        break
+                                else:
+                                    pass
                             else:
-                                print "------"
-
-                        else:
-                            print "Loop detected"
-                    clientsock.send(reply)
-                    print len(reply)
-                else:#ToDo CHECK THE PROGRAM AVAILABILITY  NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
-                    if(self.db.getStatus()=="available"):
-                        reply={}
-                        reply["msg"]="Done"
-                        clientsock.send(json.dumps(reply))
-                    else:
-                        reply = {}
-                        reply["msg"] = "Fail"
-                        clientsock.send(json.dumps(reply))
-                    #pass
+                                print "Loop detected"
+                    else:#ToDo CHECK THE PROGRAM AVAILABILITY  NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
+                        pass
+            repmsg=json.dumps(reply)
+            clientsock.send(repmsg)
+            #print len(reply)
             clientsock.close()
 
     def conectToNextNode(self,NextNode,msg):
