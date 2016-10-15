@@ -84,6 +84,10 @@ class ControlDeamon:
             reply["msg"] = "Done"
             reply["iam"]=jsonmsg["you"]
             reply["myips"] = jsonmsg["you"]
+            lengthofprg = len(jsonmsg["seq"])
+            handle=MessageHandle()
+            tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
+
             if(gofornode):#ToDO check the status and return I cant message
                 if (self.db.getStatus() != "av"):
                     cprint(' not av', 'green')
@@ -92,7 +96,7 @@ class ControlDeamon:
                     reply["next"] = None
                 if(isavilable):  #this node is avilable
                     cprint('in av', 'green')
-                    handle=MessageHandle()
+                    #handle=MessageHandle()
                     nextList=handle.getNextNodes(jsonmsg)
                     if(nextList!=None):  #This is not an end node
                         cprint('Not Last', 'green')
@@ -113,7 +117,7 @@ class ControlDeamon:
                                         tempjm=json.loads(msg)
                                         tempjm["ip"]=node.getip()
                                         reply["next"]=tempjm
-                                        print "------ ",msg
+                                        #print "------ ",msg
                                         break
                                     else:
                                         cprint('Fail in', 'green')
@@ -125,9 +129,14 @@ class ControlDeamon:
                                 print "Loop detected"
                     else:#ToDo NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
                         cprint('Last', 'green')
-                        print "HEY AM I THE LAST ONE?"
+                        #print "HEY AM I THE LAST ONE?"
                         pass
+
+
             repmsg=json.dumps(reply)
+            next_word_count=repmsg.count("next")
+            if((lengthofprg-tempmyseqid)==next_word_count):
+                cprint('LAMO', 'green')
             clientsock.send(repmsg)
             #print len(reply)
             clientsock.close()

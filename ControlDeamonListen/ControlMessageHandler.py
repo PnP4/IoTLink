@@ -10,6 +10,16 @@ from Utils.NextNode import NextNode
 
 class MessageHandle:
 
+    def getMySeqId(self,fulljson,myprogram):
+        sequence = fulljson["seq"]
+        myseqno = -1
+        for i in sequence:
+            if (i["name"] == myprogram):
+                myseqno = i["seqno"]
+                break
+        if (myseqno == len(sequence)):
+            return None
+        return myseqno
 
     def findNext(self,fulljson, myprogram):
         sequence = fulljson["seq"]
