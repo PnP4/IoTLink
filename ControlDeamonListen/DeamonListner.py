@@ -96,7 +96,7 @@ class ControlDeamon:
                     nextList=handle.getNextNodes(jsonmsg)
                     if(nextList!=None):  #This is not an end node
                         cprint('Not Last', 'green')
-                        jsonmsg["you"] = handle.findNext(jsonmsg, jsonmsg["you"])["name"]
+                        jsonmsg["you"] = handle.findNext(jsonmsg, jsonmsg["you"])["name"] #change the next node's you tag.
                         for node in nextList: #check all nodes sequentially for the availability
                             cprint('an node '+node.getip(), 'green')
                             if(not self.filetrOutSelfIps(node)):
@@ -112,7 +112,7 @@ class ControlDeamon:
                                         cprint('Fail not in', 'green')
                                         tempjm=json.loads(msg)
                                         tempjm["ip"]=node.getip()
-                                        reply["next"]=json.dumps(tempjm)
+                                        reply["next"]=tempjm
                                         print "------ ",msg
                                         break
                                     else:
