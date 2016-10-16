@@ -10,6 +10,16 @@ from Utils.NextNode import NextNode
 
 class MessageHandle:
 
+    def WriteJsonFile(self,jsonobj):
+        path=os.getenv("HOME")+"/MetaPnpGlobal"
+        if not os.path.exists(path):
+            os.makedirs(path)
+        filepath=path+"/config.json"
+        jsfile=open(filepath,"w")
+        json.dump(jsonobj, jsfile)
+
+
+
     def getMySeqId(self,fulljson,myprogram):
         sequence = fulljson["seq"]
         myseqno = -1

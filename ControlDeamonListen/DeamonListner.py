@@ -138,6 +138,8 @@ class ControlDeamon:
             cprint(""+str(lengthofprg)+" "+str(tempmyseqid)+" "+str(next_word_count), 'green')
             if((lengthofprg-tempmyseqid)==next_word_count):
                 cprint('LAMO', 'green')
+                handle.WriteJsonFile(jsonmsg)
+
             clientsock.send(repmsg)
             #print len(reply)
             clientsock.close()
