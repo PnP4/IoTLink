@@ -135,6 +135,7 @@ class ControlDeamon:
 
             repmsg=json.dumps(reply)
             next_word_count=repmsg.count("next")
+            cprint(""+str(lengthofprg)+" "+str(tempmyseqid)+" "+str(next_word_count), 'green')
             if((lengthofprg-tempmyseqid)==next_word_count):
                 cprint('LAMO', 'green')
             clientsock.send(repmsg)

@@ -17,8 +17,6 @@ class MessageHandle:
             if (i["name"] == myprogram):
                 myseqno = i["seqno"]
                 break
-        if (myseqno == len(sequence)):
-            return None
         return myseqno
 
     def findNext(self,fulljson, myprogram):
