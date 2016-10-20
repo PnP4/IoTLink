@@ -34,7 +34,7 @@ class SQLDB:
         self.getCon()
         cursor = self.dbconnection.cursor()
         cursor.execute("Insert INTO metmetadata(name,port) values('inp',8200)")
-        cursor.execute("Insert INTO metmetadata(name,port) values('out',8500)")
+        cursor.execute("Insert INTO metmetadata(name,port,ip) values('out',8500,'192.168.100.1')")
         cursor.execute("Insert INTO metmetadata(name,port) values('cont',8100)")
         cursor.execute("Insert INTO snapdata(keyname,data) values('status','av')")
         cursor.execute("Insert INTO snapdata(keyname) values('prgid')")

@@ -19,11 +19,12 @@ class OutputDaemon:
     def connect(self):
         try:
             self.clientsocket=socket.socket()
+            self.clientsocket.settimeout(2)
             self.clientsocket.connect((self.ip,int(self.port)))
             self.handle=outputHandler()
             return True
         except Exception as e:
-            print "Error at output:- ",e
+            #print "Error at output:- ",e
             return False
 
     def sendmsg(self):

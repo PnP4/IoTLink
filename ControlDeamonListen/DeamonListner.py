@@ -152,6 +152,6 @@ class ControlDeamon:
             return False
 
 
-p=ControlDeamon()
-if(p.connect()):
-    p.handleClient()
+#p=ControlDeamon()
+#if(p.connect()):
+#    p.handleClient()

@@ -6,6 +6,8 @@ import time
 
 import sys
 
+from matplotlib.finance import md5
+
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(path)
 
@@ -27,10 +29,35 @@ def ouputFunc():
     outp=OutputDaemon()
     while(True):
         if(outp.connect()):
-            break
+            print "Connected"
+            outp.msg()
+        #break
+        print "Error @ Output"
         time.sleep(2)
 
     outp.sendmsg()
+try:
+    path = os.getenv("HOME") + "/MetaPnpGlobal"
+    if not os.path.exists(path):
+        print "---"
+        os.makedirs(path)
+except Exception as e:
+    print e
+filepath = path + "/config.json"
+print filepath
+try:
+    confile=open(filepath,'r')
+except Exception as e:
+    print"at MainHandler"
+    confile = open(filepath, 'w+')
+    confile.close()
+    confile = open(filepath, 'r')
+msg=confile.read()
+if(msg!=None):
+    curmdh=md5(msg)
+else:
+    curmdh=None
+confile.close()
 
 
 
@@ -45,16 +72,27 @@ if(controid==0):
     print "Control"
     controlDaemonFunct()
 else:
-    print "Inp"
+
     inpid=os.fork()
     if(inpid==0):
+        print "Inp"
         inputDaemonFunc()
     else:
-        print "Out"
+
         outid=os.fork()
         if(outid==0):
+            print "Out"
             ouputFunc()
 
-
-while True:
-    pass
+        else:
+            while True:
+                confile = open(filepath)
+                msg = confile.read()
+                if (msg != None):
+                    newmdh = md5(msg)
+                else:
+                    newmdh = None
+                confile.close()
+                if (curmdh != newmdh):
+                    print "Got File Change"
+                time.sleep(5)
