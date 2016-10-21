@@ -92,8 +92,9 @@ class ControlDeamon:
             handle=MessageHandle()
             tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
 
+            cprint(self.db.getStatus()+"  "+prgid+"   "+curpid+"  ", 'red')
             if(gofornode):#ToDO check the status and return I cant message
-                if (self.db.getStatus() != "av"  and prgid!=curpid):
+                if (self.db.getStatus() != "av" and prgid!=curpid):
                     cprint(' not av', 'green')
                     isavilable=False
                     reply["msg"] = "Fail"

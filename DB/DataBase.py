@@ -21,7 +21,7 @@ class SQLDB:
             pass
 
     def getCon(self):
-        self.dbconnection = sqlite3.connect('globalpnp.db')
+        self.dbconnection = sqlite3.connect('/tmp/globalpnp.db')
 
     def CreateTable(self):
         cursor = self.dbconnection.cursor()
@@ -94,7 +94,17 @@ class SQLDB:
     def setPrgID(self,prgid):
         self.getCon()
         cursor = self.dbconnection.cursor()
-        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'prgid' ''',(prgid))
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'prgid' ''',(prgid,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def setStatus(self,status):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        if(status):
+            cursor.execute('''UPDATE snapdata SET data = 'av' WHERE keyname = 'status' ''')
+        else:
+            cursor.execute('''UPDATE snapdata SET data = 'nav' WHERE keyname = 'status' ''')
         self.dbconnection.commit()
         self.dbconnection.close()
 
