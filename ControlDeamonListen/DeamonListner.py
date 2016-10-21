@@ -77,6 +77,10 @@ class ControlDeamon:
                 except Exception as e:
                     print e," while capturing the json commnd string ",
 
+            prgid=jsonmsg["prgid"]
+            curpid=self.db.getprgid()
+            if(curpid=="01"):
+                curpid=prgid  #Trick to find is this the first program Iot device will participate
 
             print "\n",totalclientdata
             isavilable=True
@@ -89,7 +93,7 @@ class ControlDeamon:
             tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
 
             if(gofornode):#ToDO check the status and return I cant message
-                if (self.db.getStatus() != "av"):
+                if (self.db.getStatus() != "av"  and prgid!=curpid):
                     cprint(' not av', 'green')
                     isavilable=False
                     reply["msg"] = "Fail"
@@ -152,6 +156,6 @@ class ControlDeamon:
             return False
 
 
-#p=ControlDeamon()
-#if(p.connect()):
-#    p.handleClient()
+p=ControlDeamon()
+if(p.connect()):
+    p.handleClient()

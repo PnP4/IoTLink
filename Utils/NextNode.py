@@ -31,6 +31,7 @@ class NextNode:
 
     def checkStatus(self,msg):
         clientsocket = socket.socket()
+        clientsocket.settimeout(2)
         clientsocket.connect(self.getConnectableObject())
         try:
             req_msg_json={}

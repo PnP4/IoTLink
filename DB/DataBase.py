@@ -37,7 +37,7 @@ class SQLDB:
         cursor.execute("Insert INTO metmetadata(name,port,ip) values('out',8500,'192.168.100.1')")
         cursor.execute("Insert INTO metmetadata(name,port) values('cont',8100)")
         cursor.execute("Insert INTO snapdata(keyname,data) values('status','av')")
-        cursor.execute("Insert INTO snapdata(keyname) values('prgid')")
+        cursor.execute("Insert INTO snapdata(keyname,data) values('prgid','01')")
         cursor.execute("Insert INTO snapdata(keyname,data) values('programs','a|b|c|d')")
         self.dbconnection.commit()
         self.dbconnection.close()
@@ -91,6 +91,12 @@ class SQLDB:
             return True
         return False
 
+    def setPrgID(self,prgid):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'prgid' ''',(prgid))
+        self.dbconnection.commit()
+        self.dbconnection.close()
 
 a=SQLDB()
 print a.getOutputDaemonPort()
