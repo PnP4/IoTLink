@@ -27,15 +27,21 @@ def inputDaemonFunc():
 
 def ouputFunc():
     outp=OutputDaemon()
+    failcount=0;
     while(True):
         if(outp.connect()):
             print "Connected"
-            outp.msg()
+            outp.sendmsg()
         #break
         print "Error @ Output"
+        failcount=failcount+1
+        if(failcount>5):
+            print "Next Down"
+            recoverNext()
+            break
         time.sleep(2)
 
-    outp.sendmsg()
+
 try:
     path = os.getenv("HOME") + "/MetaPnpGlobal"
     if not os.path.exists(path):

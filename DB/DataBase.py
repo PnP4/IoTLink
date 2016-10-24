@@ -40,6 +40,7 @@ class SQLDB:
         cursor.execute("Insert INTO snapdata(keyname,data) values('prgid','01')")
         cursor.execute("Insert INTO snapdata(keyname,data) values('programs','a|b|c|d')")
         cursor.execute("Insert INTO snapdata(keyname) values('parent')")
+        cursor.execute("Insert INTO snapdata(keyname) values('myname')")  #whether a b c d
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -116,6 +117,22 @@ class SQLDB:
         self.dbconnection.commit()
         self.dbconnection.close()
 
+    def setMyName(self, name):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'myname' ''', (name,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def getMyName(self):
+        try:
+            self.getCon()
+            cursor = self.dbconnection.cursor()
+            cursor.execute("SELECT data FROM snapdata WHERE keyname = 'myname'")
+            return cursor.fetchone()[0]
+        except:
+            return None
+
 
 a=SQLDB()
 print a.getOutputDaemonPort()
@@ -127,3 +144,4 @@ print a.isPrgInMe("a")
 print a.isPrgInMe("z")
 print a.getprgid()
 print a.getStatus()
+print a.getMyName()

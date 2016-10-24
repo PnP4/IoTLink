@@ -146,7 +146,11 @@ class ControlDeamon:
                 if((lengthofprg-tempmyseqid)==next_word_count):
                     cprint('LAMO My Parent:- '+clientaddr[0], 'green')
                     self.db.setParent(clientaddr[0])
-                    handle.WriteJsonFile(copyoriginaljson)
+                    handle.WriteJsonFileOriginal(copyoriginaljson)
+                    handle.WriteJsonFile(repmsg)
+                    self.db.setStatus(False)
+                    self.db.setPrgID(prgid)
+                    self.db.setMyName(copyoriginaljson["you"])
 
                 clientsock.send(repmsg)
                 #print len(reply)
