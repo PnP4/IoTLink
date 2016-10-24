@@ -39,6 +39,7 @@ class SQLDB:
         cursor.execute("Insert INTO snapdata(keyname,data) values('status','av')")
         cursor.execute("Insert INTO snapdata(keyname,data) values('prgid','01')")
         cursor.execute("Insert INTO snapdata(keyname,data) values('programs','a|b|c|d')")
+        cursor.execute("Insert INTO snapdata(keyname) values('parent')")
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -107,6 +108,14 @@ class SQLDB:
             cursor.execute('''UPDATE snapdata SET data = 'nav' WHERE keyname = 'status' ''')
         self.dbconnection.commit()
         self.dbconnection.close()
+
+    def setParent(self, parentIP):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'parent' ''', (parentIP,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
 
 a=SQLDB()
 print a.getOutputDaemonPort()

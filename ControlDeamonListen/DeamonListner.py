@@ -81,7 +81,7 @@ class ControlDeamon:
             curpid=self.db.getprgid()
             if(curpid=="01"):
                 curpid=prgid  #Trick to find is this the first program Iot device will participate
-
+            copyoriginaljson=json.loads(json.dumps(jsonmsg))
             print "\n",totalclientdata
             isavilable=True
             reply = {}
@@ -89,65 +89,70 @@ class ControlDeamon:
             reply["iam"]=jsonmsg["you"]
             reply["myips"] = jsonmsg["you"]
             lengthofprg = len(jsonmsg["seq"])
+            msgtype = jsonmsg["msgtype"]
             handle=MessageHandle()
             tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
 
             cprint(self.db.getStatus()+"  "+prgid+"   "+curpid+"  ", 'red')
-            if(gofornode):#ToDO check the status and return I cant message
-                if (self.db.getStatus() != "av" and prgid!=curpid):
-                    cprint(' not av', 'green')
-                    isavilable=False
-                    reply["msg"] = "Fail"
-                    reply["next"] = None
-                if(isavilable):  #this node is avilable
-                    cprint('in av', 'green')
-                    #handle=MessageHandle()
-                    nextList=handle.getNextNodes(jsonmsg)
-                    if(nextList!=None):  #This is not an end node
-                        cprint('Not Last', 'green')
-                        jsonmsg["you"] = handle.findNext(jsonmsg, jsonmsg["you"])["name"] #change the next node's you tag.
-                        for node in nextList: #check all nodes sequentially for the availability
-                            cprint('an node '+node.getip(), 'green')
-                            if(not self.filetrOutSelfIps(node)):
-                                #print "Done"
-                                cprint('not loop', 'green')
+            if(msgtype=="link"):
+                if(gofornode):#ToDO check the status and return I cant message
+                    if (self.db.getStatus() != "av" and prgid!=curpid):
+                        cprint(' not av', 'green')
+                        isavilable=False
+                        reply["msg"] = "Fail"
+                        reply["next"] = None
+                    if(isavilable):  #this node is avilable
+                        cprint('in av', 'green')
+                        #handle=MessageHandle()
+                        nextList=handle.getNextNodes(jsonmsg)
+                        if(nextList!=None):  #This is not an end node
+                            cprint('Not Last', 'green')
+                            jsonmsg["you"] = handle.findNext(jsonmsg, jsonmsg["you"])["name"] #change the next node's you tag.
+                            for node in nextList: #check all nodes sequentially for the availability
+                                cprint('an node '+node.getip(), 'green')
+                                if(not self.filetrOutSelfIps(node)):
+                                    #print "Done"
+                                    cprint('not loop', 'green')
 
-                                msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
-                                if(msg):
-                                    cprint('msg up', 'green')
-                                    #print msg
-                                    print "======================"
-                                    if(not ("Fail" in json.loads(msg)["msg"])):
-                                        cprint('Fail not in', 'green')
-                                        tempjm=json.loads(msg)
-                                        tempjm["ip"]=node.getip()
-                                        reply["next"]=tempjm
-                                        #print "------ ",msg
-                                        break
+                                    msg=self.conectToNextNode(node,jsonmsg)#This means the node is available
+                                    if(msg):
+                                        cprint('msg up', 'green')
+                                        #print msg
+                                        print "======================"
+                                        if(not ("Fail" in json.loads(msg)["msg"])):
+                                            cprint('Fail not in', 'green')
+                                            tempjm=json.loads(msg)
+                                            tempjm["ip"]=node.getip()
+                                            reply["next"]=tempjm
+                                            #print "------ ",msg
+                                            break
+                                        else:
+                                            cprint('Fail in', 'green')
                                     else:
-                                        cprint('Fail in', 'green')
+                                        cprint('msg is False', 'green')
+                                        pass
                                 else:
-                                    cprint('msg is False', 'green')
-                                    pass
-                            else:
-                                cprint('loop broo', 'green')
-                                print "Loop detected"
-                    else:#ToDo NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
-                        cprint('Last', 'green')
-                        #print "HEY AM I THE LAST ONE?"
-                        pass
+                                    cprint('loop broo', 'green')
+                                    print "Loop detected"
+                        else:#ToDo NEED TO GET THE PROGRAM NAME FROM THE MESSAGE
+                            cprint('Last', 'green')
+                            #print "HEY AM I THE LAST ONE?"
+                            pass
 
 
-            repmsg=json.dumps(reply)
-            next_word_count=repmsg.count("next")
-            cprint(""+str(lengthofprg)+" "+str(tempmyseqid)+" "+str(next_word_count), 'green')
-            if((lengthofprg-tempmyseqid)==next_word_count):
-                cprint('LAMO', 'green')
-                handle.WriteJsonFile(jsonmsg)
+                repmsg=json.dumps(reply)
+                next_word_count=repmsg.count("next")
+                cprint(""+str(lengthofprg)+" "+str(tempmyseqid)+" "+str(next_word_count), 'green')
+                if((lengthofprg-tempmyseqid)==next_word_count):
+                    cprint('LAMO My Parent:- '+clientaddr[0], 'green')
+                    self.db.setParent(clientaddr[0])
+                    handle.WriteJsonFile(copyoriginaljson)
 
-            clientsock.send(repmsg)
-            #print len(reply)
-            clientsock.close()
+                clientsock.send(repmsg)
+                #print len(reply)
+                clientsock.close()
+
+            #if(msgtype=="update"):
 
     def conectToNextNode(self,NextNode,msg):
         try:

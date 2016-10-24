@@ -14,6 +14,7 @@ data["b"]=[{"ip":"192.168.1.20","conport":8100,"avialable":0,"inport":8090},{"ip
 data["c"]=[{"ip":"127.0.0.1","conport":8100,"avialable":0,"inport":8090},{"ip":"138.197.8.95","conport":8100,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
 data["d"]=[{"ip":"127.0.0.1","conport":8100,"avialable":0,"inport":8090},{"ip":"192.34.63.88","conport":8100,"avialable":0,"inport":8090},{"ip":"127.0.0.1","conport":8080,"avialable":0,"inport":8090}]
 data["prgid"]="125899"
+data["msgtype"]="link"
 
 
 msg=json.dumps(data)
