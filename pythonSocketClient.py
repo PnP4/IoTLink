@@ -16,8 +16,11 @@ data["d"]=[{"ip":"127.0.0.1","conport":8100,"avialable":0,"inport":8090},{"ip":"
 data["prgid"]="125899"
 data["msgtype"]="link"
 
-
-msg=json.dumps(data)
+recoverygen={"msg": "Done", "iam": "b", "myips": "b", "next": {"next": {"msg": "Done", "iam": "c", "ip": "138.197.8.95", "myips": "c", "next": {"msg": "Done", "iam": "d", "myips": "d", "ip": "192.34.63.88"}}}}
+recoverygen["msgtype"]="update"
+recoverygen["prgid"]="125899"
+recoverygen["you"]="a"
+msg=json.dumps(recoverygen)
 {"ip":"192.168.1.2","conport":8100,"avialable":0,"inport":8090}
 
 

@@ -6,6 +6,8 @@ import time
 
 import sys
 
+
+
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(path)
 
@@ -13,6 +15,8 @@ from termcolor import colored, cprint
 from DB.DataBase import SQLDB
 import netifaces
 from ControlMessageHandler import MessageHandle
+from Utils.NextNode import NextNode
+
 
 class ControlDeamon:
     def __init__(self):  #At initilasisation phase it will read the config and config itself
@@ -88,12 +92,19 @@ class ControlDeamon:
             reply["msg"] = "Done"
             reply["iam"]=jsonmsg["you"]
             reply["myips"] = jsonmsg["you"]
-            lengthofprg = len(jsonmsg["seq"])
+            try:
+                lengthofprg = len(jsonmsg["seq"])  #Sequence want send in the
+            except:
+                pass
             msgtype = jsonmsg["msgtype"]
             handle=MessageHandle()
-            tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
+            try:
+                tempmyseqid=handle.getMySeqId(jsonmsg,jsonmsg["you"])
+            except:
+                pass
 
             cprint(self.db.getStatus()+"  "+prgid+"   "+curpid+"  ", 'red')
+
             if(msgtype=="link"):
                 if(gofornode):#ToDO check the status and return I cant message
                     if (self.db.getStatus() != "av" and prgid!=curpid):
@@ -155,7 +166,17 @@ class ControlDeamon:
                 clientsock.send(repmsg)
                 #print len(reply)
                 clientsock.close()
+            elif(msgtype=="update"):
+                handle=MessageHandle()
+                obj=handle.getSeqJonObj()
+                print "--**--",obj["next"]
+                obj["next"] =jsonmsg
+                print "'---",obj["next"]
+                clientsock.sendall("-----")
+                self.sendToParent(json.dumps(obj))
+                clientsock.close()
 
+                print "----"
             #if(msgtype=="update"):
 
     def conectToNextNode(self,NextNode,msg):
@@ -164,6 +185,10 @@ class ControlDeamon:
 
         except:
             return False
+
+    def sendToParent(self,msg):
+        parent=NextNode(self.db.getParent(), 8100,0)
+        parent.sendMessageToParent(msg)
 
 
 p=ControlDeamon()

@@ -21,15 +21,22 @@ class RecoverDaemon:
                 os.makedirs(path)
             filepath = path + "/config.json"
             jsfile = open(filepath, "r")
-            self.myreqjson =json.load(jsfile)
+            cont=jsfile.read().strip()
+            cprint(cont,'red')
+            self.myreqjson =json.loads(cont)
             path = os.getenv("HOME") + "/MetaPnpGlobal"
             if not os.path.exists(path):
                 os.makedirs(path)
-            filepath = path + "/configseq.json"
-            jsfile = open(filepath, "r")
-            self.myseqjson = json.load(jsfile)
+            filepathseq = path + "/configseq.json"
+            jsfileseq = open(filepathseq, "r")
+            cont = jsfileseq.read().strip()
+            cprint(cont, 'red')
+            self.myseqjson = json.loads(cont)
+            self.myseqjson = json.loads(self.myseqjson)
 
             self.myid=self.myreqjson["you"]
+            cprint(self.myseqjson,'yellow')
+            cprint( self.myreqjson,'blue')
             #return  True
         except Exception as e:
             print e
@@ -41,6 +48,7 @@ class RecoverDaemon:
             return False
         else:
             reply = {}
+
             name=self.db.getMyName()
             ###REPLICATE FROM DEAMONLISTENR
             handle=MessageHandle()
@@ -54,7 +62,6 @@ class RecoverDaemon:
                     if (not self.filetrOutSelfIps(node)):
                         # print "Done"
                         cprint('not loop', 'green')
-
                         msg = self.conectToNextNode(node, self.myreqjson)  # This means the node is available
                         if (msg):
                             cprint('msg up', 'green')
@@ -79,8 +86,11 @@ class RecoverDaemon:
                 cprint('Last', 'green')
                 # print "HEY AM I THE LAST ONE?"
                 pass
+            cprint(self.myseqjson["next"], 'red')
+            self.myseqjson["next"]=reply
 
-            repmsg = json.dumps(reply)
+            repmsg = json.dumps(self.myseqjson)
+
             print repmsg
 
             ##########END REPLICATE DEAMON LISTNER

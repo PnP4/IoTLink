@@ -46,4 +46,21 @@ class NextNode:
                 return False   #ToDo add return message type
 
 
+    def sendMessageToParent(self,msg):
+        clientsocket = socket.socket()
+        clientsocket.settimeout(2)
+        clientsocket.connect(self.getConnectableObject())
+        try:
+            req_msg_json = {}
+            req_msg_json["type"] = "checkstatus"
+            # print "NextNode",msg
+            clientsocket.sendall(json.dumps(msg))
+            #rep = clientsocket.recv(1024)
+            #return rep
+            return True
+        except socket_error as s_err:
+            print s_err, " ppppp"
+            if (s_err.errno == 111):
+                return False  # ToDo add return message type
+
 

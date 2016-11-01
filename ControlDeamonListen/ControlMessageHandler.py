@@ -24,7 +24,8 @@ class MessageHandle:
             os.makedirs(path)
         filepath=path+"/configseq.json"
         jsfile=open(filepath,"w")
-        json.dump(jsonobj, jsfile)
+        #json.dump(jsonobj, jsfile)
+        jsfile.write(json.dumps(jsonobj))
 
 
     def getMySeqId(self,fulljson,myprogram):
@@ -35,6 +36,20 @@ class MessageHandle:
                 myseqno = i["seqno"]
                 break
         return myseqno
+
+    def getSeqJonObj(self):
+        path = os.getenv("HOME") + "/MetaPnpGlobal"
+        if not os.path.exists(path):
+            os.makedirs(path)
+        filepath = path + "/configseq.json"
+        jsfile = open(filepath, "r")
+        strjs=jsfile.read()
+        jobj=json.loads(strjs)
+        jobj = json.loads(jobj)
+        return jobj
+
+
+
 
     def findNext(self,fulljson, myprogram):
         sequence = fulljson["seq"]

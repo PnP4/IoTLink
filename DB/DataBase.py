@@ -133,6 +133,15 @@ class SQLDB:
         except:
             return None
 
+    def getParent(self):
+        try:
+            self.getCon()
+            cursor = self.dbconnection.cursor()
+            cursor.execute("SELECT data FROM snapdata WHERE keyname = 'parent'")
+            return cursor.fetchone()[0]
+        except:
+            return None
+
 
 a=SQLDB()
 print a.getOutputDaemonPort()
