@@ -37,12 +37,16 @@ class RecoverDaemon:
             cont = jsfileseq.read().strip()
             cprint(cont, 'red')
             self.myseqjson = json.loads(cont)
-            self.myseqjson = json.loads(self.myseqjson)
+            self.myreqjson = json.loads(self.db.getControlJson())
             self.myseqjson = json.loads(self.db.getSeqJson())
 
-            self.myid=self.myreqjson["you"]
-            cprint(self.myseqjson,'yellow')
-            cprint( self.myreqjson,'blue')
+
+            self.myseqjson=self.myseqjson.encode('ascii', 'ignore')
+            self.myseqjson = json.loads(self.myseqjson)
+            #self.myreqjson = self.myreqjson.encode('ascii', 'ignore')
+            self.myid = self.myreqjson["you"]
+            cprint(self.myseqjson, 'yellow')
+            cprint(self.myreqjson, 'blue')
             #return  True
         except Exception as e:
             print e
@@ -61,8 +65,8 @@ class RecoverDaemon:
             nextList = handle.getNextNodes(self.myreqjson)
             if (nextList != None):  # This is not an end node
                 cprint('Not Last', 'green')
-                self.myreqjson["you"] = handle.findNext(self.myreqjson, self.myreqjson["you"])[
-                    "name"]  # change the next node's you tag.
+                self.myreqjson["you"] = handle.findNext(self.myreqjson, self.myreqjson["you"])["name"]  # change the next node's you tag.
+                cprint(self.myreqjson["you"],'blue')
                 for node in nextList:  # check all nodes sequentially for the availability
                     cprint('an node ' + node.getip(), 'green')
                     if (not self.filetrOutSelfIps(node)):
@@ -92,12 +96,29 @@ class RecoverDaemon:
                 cprint('Last', 'green')
                 # print "HEY AM I THE LAST ONE?"
                 pass
-            cprint(self.myseqjson["next"], 'red')
-            self.myseqjson["next"]=reply
+            #cprint(self.myseqjson["next"], 'red')
+            #self.myseqjson["next"]=reply
+            #print type(self.myseqjson)
+            #print type(self.myseqjson.encode('ascii', 'ignore'))
+            #repmsg = json.dumps(reply)
 
-            repmsg = json.dumps(self.myseqjson)
+            #print len(repmsg.split("next"))," Len Rep Message"
+            #print len(self.myreqjson.split("next")), " Len Rep Message"
 
-            print len(repmsg.split()),
+
+
+            finalReply=json.loads(json.dumps(self.myseqjson))
+            try:
+                finalReply["next"]=reply["next"]
+            except:
+                finalReply["next"] = None
+
+
+
+
+            if(self.getNoOfnodes(self.myseqjson)==self.getNoOfnodes(finalReply)):
+                cprint('LAMO', 'green')
+
 
             #parent = NextNode(self.db.getParent(), 8100, 0)
             #parent.sendMessageToParent(repmsg)
@@ -131,6 +152,17 @@ class RecoverDaemon:
         except:
             return False
 
+    def getNoOfnodes(self,jsonobj):
+        jsfile = jsonobj
+        count = 0;
+        while ("next" in jsfile):
+            count = count + 1
+            jsfile = jsfile["next"]
+            if(jsfile is None):
+                return count
+            #cprint(jsfile,'grey')
+        #cprint('------------','green')
+        return count
 
 p=RecoverDaemon()
 p.getNextScans()
