@@ -3,6 +3,9 @@ import os
 
 import sys
 from termcolor import colored, cprint
+
+
+
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(path)
 
@@ -10,6 +13,7 @@ import netifaces
 
 from DB.DataBase import SQLDB
 from ControlDeamonListen.ControlMessageHandler import MessageHandle
+from Utils.NextNode import NextNode
 
 class RecoverDaemon:
     def __init__(self):
@@ -24,6 +28,7 @@ class RecoverDaemon:
             cont=jsfile.read().strip()
             cprint(cont,'red')
             self.myreqjson =json.loads(cont)
+            self.myreqjson = json.loads(self.db.getControlJson())
             path = os.getenv("HOME") + "/MetaPnpGlobal"
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -33,6 +38,7 @@ class RecoverDaemon:
             cprint(cont, 'red')
             self.myseqjson = json.loads(cont)
             self.myseqjson = json.loads(self.myseqjson)
+            self.myseqjson = json.loads(self.db.getSeqJson())
 
             self.myid=self.myreqjson["you"]
             cprint(self.myseqjson,'yellow')
@@ -91,7 +97,10 @@ class RecoverDaemon:
 
             repmsg = json.dumps(self.myseqjson)
 
-            print repmsg
+            print len(repmsg.split()),
+
+            #parent = NextNode(self.db.getParent(), 8100, 0)
+            #parent.sendMessageToParent(repmsg)
 
             ##########END REPLICATE DEAMON LISTNER
 

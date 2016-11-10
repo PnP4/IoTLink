@@ -41,6 +41,8 @@ class SQLDB:
         cursor.execute("Insert INTO snapdata(keyname,data) values('programs','a|b|c|d')")
         cursor.execute("Insert INTO snapdata(keyname) values('parent')")
         cursor.execute("Insert INTO snapdata(keyname) values('myname')")  #whether a b c d
+        cursor.execute("Insert INTO snapdata(keyname) values('controljson')")
+        cursor.execute("Insert INTO snapdata(keyname) values('seqjson')")
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -116,6 +118,7 @@ class SQLDB:
         cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'parent' ''', (parentIP,))
         self.dbconnection.commit()
         self.dbconnection.close()
+        print "PARENIP:- ",parentIP
 
     def setMyName(self, name):
         self.getCon()
@@ -142,6 +145,38 @@ class SQLDB:
         except:
             return None
 
+    def setControlJson(self,json):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'controljson' ''', (json,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def setSeqJson(self,json):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'seqjson' ''', (json,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def getControlJson(self):
+        try:
+            self.getCon()
+            cursor = self.dbconnection.cursor()
+            cursor.execute("SELECT data FROM snapdata WHERE keyname = 'controljson'")
+            return cursor.fetchone()[0]
+        except:
+            return None
+
+    def getSeqJson(self):
+        try:
+            self.getCon()
+            cursor = self.dbconnection.cursor()
+            cursor.execute("SELECT data FROM snapdata WHERE keyname = 'seqjson'")
+            return cursor.fetchone()[0]
+        except:
+            return None
+
 
 a=SQLDB()
 print a.getOutputDaemonPort()
@@ -154,3 +189,4 @@ print a.isPrgInMe("z")
 print a.getprgid()
 print a.getStatus()
 print a.getMyName()
+print a.getParent()

@@ -20,7 +20,7 @@ recoverygen={"msg": "Done", "iam": "b", "myips": "b", "next": {"next": {"msg": "
 recoverygen["msgtype"]="update"
 recoverygen["prgid"]="125899"
 recoverygen["you"]="a"
-msg=json.dumps(recoverygen)
+msg=json.dumps(data)
 {"ip":"192.168.1.2","conport":8100,"avialable":0,"inport":8090}
 
 

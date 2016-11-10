@@ -86,7 +86,7 @@ class ControlDeamon:
             if(curpid=="01"):
                 curpid=prgid  #Trick to find is this the first program Iot device will participate
             copyoriginaljson=json.loads(json.dumps(jsonmsg))
-            print "\n",totalclientdata
+            #print "\n",totalclientdata
             isavilable=True
             reply = {}
             reply["msg"] = "Done"
@@ -157,7 +157,10 @@ class ControlDeamon:
                 if((lengthofprg-tempmyseqid)==next_word_count):
                     cprint('LAMO My Parent:- '+clientaddr[0], 'green')
                     self.db.setParent(clientaddr[0])
+
                     handle.WriteJsonFileOriginal(copyoriginaljson)
+                    self.db.setControlJson(json.dumps(copyoriginaljson))
+                    self.db.setSeqJson(json.dumps(repmsg))
                     handle.WriteJsonFile(repmsg)
                     self.db.setStatus(False)
                     self.db.setPrgID(prgid)
@@ -168,13 +171,13 @@ class ControlDeamon:
                 clientsock.close()
             elif(msgtype=="update"):
                 handle=MessageHandle()
-                obj=handle.getSeqJonObj()
-                print "--**--",obj["next"]
-                obj["next"] =jsonmsg
-                print "'---",obj["next"]
-                clientsock.sendall("-----")
-                self.sendToParent(json.dumps(obj))
-                clientsock.close()
+                #obj=handle.getSeqJonObj()
+                #print "--**--",obj["next"]
+                #obj["next"] =jsonmsg
+                #print "'---",obj["next"]
+                #clientsock.sendall("-----")
+                #self.sendToParent(json.dumps(obj))
+                #clientsock.close()
 
                 print "----"
             #if(msgtype=="update"):
