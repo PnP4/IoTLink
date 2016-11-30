@@ -92,6 +92,7 @@ class ControlDeamon:
             reply["msg"] = "Done"
             reply["iam"]=jsonmsg["you"]
             reply["myips"] = jsonmsg["you"]
+
             try:
                 lengthofprg = len(jsonmsg["seq"])  #Sequence want send in the
             except:
@@ -106,6 +107,8 @@ class ControlDeamon:
             cprint(self.db.getStatus()+"  "+prgid+"   "+curpid+"  ", 'red')
 
             if(msgtype=="link"):
+                successip=None
+                successPort=None
                 if(gofornode):#ToDO check the status and return I cant message
                     if (self.db.getStatus() != "av" and prgid!=curpid):
                         cprint(' not av', 'green')
@@ -135,6 +138,8 @@ class ControlDeamon:
                                             tempjm=json.loads(msg)
                                             tempjm["ip"]=node.getip()
                                             reply["next"]=tempjm
+                                            successip=node.getip()
+                                            successPort=8200
                                             #print "------ ",msg
                                             break
                                         else:
@@ -152,12 +157,16 @@ class ControlDeamon:
 
 
                 repmsg=json.dumps(reply)
+
                 next_word_count=repmsg.count("next")
                 cprint(""+str(lengthofprg)+" "+str(tempmyseqid)+" "+str(next_word_count), 'green')
                 if((lengthofprg-tempmyseqid)==next_word_count):
                     cprint('LAMO My Parent:- '+clientaddr[0], 'green')
                     self.db.setParent(clientaddr[0])
-                    cprint(reply["next"],"yellow")
+                    try:
+                        cprint(reply["next"],"yellow")
+                    except:
+                        print "error in printing reply json"
                     handle.WriteJsonFileOriginal(copyoriginaljson)
                     self.db.setControlJson(json.dumps(copyoriginaljson))
                     self.db.setSeqJson(json.dumps(repmsg))
@@ -165,6 +174,10 @@ class ControlDeamon:
                     self.db.setStatus(False)
                     self.db.setPrgID(prgid)
                     self.db.setMyName(copyoriginaljson["you"])
+                    self.db.setOutputIp(successip)
+                    self.db.setOutputPort(successPort)
+
+
 
                 clientsock.send(repmsg)
                 #print len(reply)
@@ -185,7 +198,6 @@ class ControlDeamon:
     def conectToNextNode(self,NextNode,msg):
         try:
             return NextNode.checkStatus(msg)
-
         except:
             return False
 

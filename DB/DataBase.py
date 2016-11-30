@@ -178,6 +178,21 @@ class SQLDB:
             return None
 
 
+    def setOutputIp(self, ip):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE metmetadata SET ip = ? WHERE name = 'out' ''', (ip,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def setOutputPort(self, port):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE metmetadata SET port = ? WHERE name = 'out' ''', (port,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+
 a=SQLDB()
 print a.getOutputDaemonPort()
 print a.getInputDaemonPort()
