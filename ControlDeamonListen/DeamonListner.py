@@ -171,11 +171,20 @@ class ControlDeamon:
                     self.db.setControlJson(json.dumps(copyoriginaljson))
                     self.db.setSeqJson(json.dumps(repmsg))
                     handle.WriteJsonFile(repmsg)
-                    self.db.setStatus(False)
+                    self.db.setStatus(True)
                     self.db.setPrgID(prgid)
                     self.db.setMyName(copyoriginaljson["you"])
                     self.db.setOutputIp(successip)
                     self.db.setOutputPort(successPort)
+
+                    path = "/tmp/control"
+                    try:
+                        os.mkfifo(path)
+                    except Exception as e:
+                        pass
+                    fifo = open(path, "w")
+                    fifo.write("doneeee Lamoo")
+                    fifo.close()
 
 
 
@@ -205,7 +214,7 @@ class ControlDeamon:
         parent=NextNode(self.db.getParent(), 8100,0)
         parent.sendMessageToParent(msg)
 
-
-p=ControlDeamon()
-if(p.connect()):
-    p.handleClient()
+cprint("DaemonListner start","yellow")
+cont = ControlDeamon()
+if (cont.connect()):
+    cont.handleClient()

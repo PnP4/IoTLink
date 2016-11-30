@@ -10,6 +10,8 @@ sys.path.append(path)
 from inputDaemonHandler import inputDaemonHandle
 from ConfigFile.ConfigParser import ConfigMonitor
 from DB.DataBase import SQLDB
+from termcolor import colored, cprint
+
 
 class inputDaemon:
     def __init__(self):
@@ -41,3 +43,7 @@ class inputDaemon:
                 print msg
             clientsock.close()
 
+cprint("InputDaemon start","yellow")
+inpt = inputDaemon()
+if (inpt.connect()):
+    inpt.handleClient()

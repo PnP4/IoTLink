@@ -3,6 +3,8 @@ import socket
 
 import sys
 
+import time
+
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(path)
 
@@ -10,6 +12,8 @@ sys.path.append(path)
 from ConfigFile.ConfigParser import ConfigMonitor
 from OutputHandler import outputHandler
 from DB.DataBase import SQLDB
+from termcolor import colored, cprint
+
 class OutputDaemon:
     def __init__(self):
         self.db = SQLDB()
@@ -17,6 +21,10 @@ class OutputDaemon:
         self.port=self.db.getOutputDaemonPort()
 
     def connect(self):
+        if(self.ip is None):
+            while(True):
+                demonvar=1
+
         try:
             self.clientsocket=socket.socket()
             self.clientsocket.settimeout(2)
@@ -37,4 +45,20 @@ class OutputDaemon:
                 break
         self.clientsocket.close()
 
+
+cprint("OutputDaemon start","yellow")
+outp = OutputDaemon()
+failcount = 0;
+while (True):
+    if (outp.connect()):
+        print "Connected"
+        outp.sendmsg()
+    # break
+    print "Error @ Output"
+    failcount = failcount + 1
+    if (failcount > 5):
+        print "Next Down"
+        # recoverNext()
+        break
+    time.sleep(2)
 
