@@ -43,6 +43,7 @@ class SQLDB:
         cursor.execute("Insert INTO snapdata(keyname) values('myname')")  #whether a b c d
         cursor.execute("Insert INTO snapdata(keyname) values('controljson')")
         cursor.execute("Insert INTO snapdata(keyname) values('seqjson')")
+        cursor.execute("Insert INTO snapdata(keyname) values('myprj')")
         self.dbconnection.commit()
         self.dbconnection.close()
 
@@ -189,6 +190,13 @@ class SQLDB:
         self.getCon()
         cursor = self.dbconnection.cursor()
         cursor.execute('''UPDATE metmetadata SET port = ? WHERE name = 'out' ''', (port,))
+        self.dbconnection.commit()
+        self.dbconnection.close()
+
+    def setMyProgram(self,myprj):
+        self.getCon()
+        cursor = self.dbconnection.cursor()
+        cursor.execute('''UPDATE snapdata SET data = ? WHERE keyname = 'myprj' ''', (myprj,))
         self.dbconnection.commit()
         self.dbconnection.close()
 

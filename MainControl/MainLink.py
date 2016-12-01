@@ -59,7 +59,7 @@ dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 proccontrol = subprocess.Popen(['python', dir_path+'/ControlDeamonListen/DeamonListner.py'])
 procinput = subprocess.Popen(['python', dir_path+'/inputDaemonListen/inpuDeamon.py'])
 procoutput = subprocess.Popen(['python', dir_path+'/outPutDaemon/OutPutDaemon.py'])
-process = subprocess.Popen(['python', os.environ['HOME']+"/a.py"])
+process = subprocess.Popen(['python', dir_path+"/Program/programhandle.py"])
 
 def getFromControl():
     fifo = open(path, "r")
