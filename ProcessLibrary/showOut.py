@@ -15,12 +15,8 @@ from PnpLib import initPnp , pnpinput ,pnpprint
 initPnp()
 
 while True:
-    for i in range(0, 150):
-
-        print "send", str(i)
-        #pnpinput(str(i));
-        msg=pnpinput()
-        print msg
+    msg=pnpinput()
+    print msg
         #time.sleep(1)
 
 
