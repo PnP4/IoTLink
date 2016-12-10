@@ -23,6 +23,9 @@ recoverygen["you"]="a"
 msg=json.dumps(data)
 {"ip":"192.168.1.2","conport":8100,"avialable":0,"inport":8090}
 
+print msg
+
+
 
 clientsocket.connect((ConnetTo,Port))
 
