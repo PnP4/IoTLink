@@ -1,5 +1,6 @@
 sudo pip install netifaces
 sudo pip install termcolor
+sudo pip install queuelib
 
 sudo apt-get install python-pip python-dev build-essential
 export LC_ALL=C
